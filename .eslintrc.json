@@ -5,11 +5,13 @@
     "prettier"
   ],
   "plugins": [
-    "check-file"
+    "check-file",
+    "n"
   ],
   "rules": {
     "prefer-arrow-callback": "error",
     "prefer-template": "error",
+    "n/no-process-env": "error",
     "check-file/filename-naming-convention": [
       "error",
       {

@@ -10,9 +10,12 @@
     "format": "prettier src/ --write"
   },
   "dependencies": {
+    "@t3-oss/env-nextjs": "^0.11.1",
+    "jiti": "^2.0.0",
     "next": "14.2.13",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^4.3.0",
@@ -23,6 +26,7 @@
     "eslint-config-next": "14.2.13",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-check-file": "^2.8.0",
+    "eslint-plugin-n": "^17.10.3",
     "postcss": "^8",
     "prettier": "^3.3.3",
     "prettier-plugin-tailwindcss": "^0.6.8",
