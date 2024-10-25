@@ -1,7 +1,8 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { FormEvent } from 'react'
+
+import { useFormContext } from 'react-hook-form'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -13,26 +14,24 @@ import {
 } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { useZodForm } from '@/hooks/use-zod-sign-up-form'
 
-import { useSignUpFormContext } from '../sign-up-form-context'
-import { accountDetailsSchema } from '../sign-up-schema'
+import { AccountDetailsFields, SignUpFormSchema } from '../sign-up-schema'
 
 export default function AccountDetails() {
   const router = useRouter()
-  const { formData, updateFormData } = useSignUpFormContext()
-  const { errors, validate } = useZodForm(accountDetailsSchema)
+  const {
+    register,
+    trigger,
+    formState: { errors },
+  } = useFormContext<SignUpFormSchema>()
 
-  const handleSubmit = (e: FormEvent): void => {
-    e.preventDefault()
-    if (
-      validate({
-        username: formData.username,
-        password: formData.password,
-      })
-    ) {
-      router.push('/sign-up/preferences')
-    }
+  const handleSubmit = async () => {
+    const requiredFields: AccountDetailsFields[] = ['username', 'password']
+    const isAccountDetailsValid = await trigger(requiredFields, {
+      shouldFocus: true,
+    })
+    if (!isAccountDetailsValid) return
+    router.push('/sign-up/preferences')
   }
 
   return (
@@ -44,28 +43,17 @@ export default function AccountDetails() {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="username">Username</Label>
-            <Input
-              id="username"
-              value={formData.username || ''}
-              onChange={(e) => updateFormData({ username: e.target.value })}
-              className={errors.username ? 'border-red-500' : ''}
-            />
+            <Input id="username" {...register('username')} />
             {errors.username && (
-              <p className="text-sm text-red-500">{errors.username}</p>
+              <p className="text-sm text-red-500">{errors.username.message}</p>
             )}
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="password">Password</Label>
-            <Input
-              id="password"
-              type="password"
-              value={formData.password || ''}
-              onChange={(e) => updateFormData({ password: e.target.value })}
-              className={errors.password ? 'border-red-500' : ''}
-            />
+            <Input id="password" {...register('password')} />
             {errors.password && (
-              <p className="text-sm text-red-500">{errors.password}</p>
+              <p className="text-sm text-red-500">{errors.password.message}</p>
             )}
           </div>
         </form>

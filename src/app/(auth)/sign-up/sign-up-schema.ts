@@ -37,7 +37,11 @@ export const signUpFormSchema = z.object({
   ...preferencesSchema.shape,
 })
 
-export type SignUpFormSchemaShape = z.infer<typeof signUpFormSchema>
-export type PersonalInformationSchemaShape = z.infer<typeof personalInfoSchema>
-export type AccountDetailsSchemaShape = z.infer<typeof accountDetailsSchema>
-export type PerferencesSchemaShape = z.infer<typeof preferencesSchema>
+export type SignUpFormSchema = z.infer<typeof signUpFormSchema>
+export type PersonalInformationSchema = z.infer<typeof personalInfoSchema>
+export type AccountDetailsSchema = z.infer<typeof accountDetailsSchema>
+export type PreferencesSchema = z.infer<typeof preferencesSchema>
+
+export type PersonalInformationFields = keyof PersonalInformationSchema
+export type AccountDetailsFields = keyof AccountDetailsSchema
+export type PreferencesFields = keyof PreferencesSchema

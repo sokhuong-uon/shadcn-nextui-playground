@@ -1,9 +1,8 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { FormEvent, useState } from 'react'
 
-import { ZodError } from 'zod'
+import { useFormContext } from 'react-hook-form'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -16,51 +15,27 @@ import {
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 
-import { useSignUpFormContext } from './sign-up-form-context'
-import {
-  type PersonalInformationSchemaShape,
-  personalInfoSchema,
-} from './sign-up-schema'
+import { PersonalInformationFields, SignUpFormSchema } from './sign-up-schema'
 
-type ValidationErrors = {
-  [K in keyof PersonalInformationSchemaShape]?: string
-}
-
-export default function PersonalInfo() {
+export default function PersonalInformationPage() {
   const router = useRouter()
-  const { formData, updateFormData } = useSignUpFormContext()
-  const [errors, setErrors] = useState<ValidationErrors>({})
+  const {
+    register,
+    trigger,
+    formState: { errors },
+  } = useFormContext<SignUpFormSchema>()
 
-  const validateFields = (): boolean => {
-    try {
-      personalInfoSchema.parse({
-        firstName: formData.firstName,
-        lastName: formData.lastName,
-        email: formData.email,
-      })
-      setErrors({})
-      return true
-    } catch (error) {
-      if (error instanceof ZodError) {
-        const formattedErrors: ValidationErrors = {}
-        error.errors.forEach((err) => {
-          if (err.path[0]) {
-            formattedErrors[
-              err.path[0] as keyof PersonalInformationSchemaShape
-            ] = err.message
-          }
-        })
-        setErrors(formattedErrors)
-      }
-      return false
-    }
-  }
-
-  const handleSubmit = (e: FormEvent): void => {
-    e.preventDefault()
-    if (validateFields()) {
-      router.push('/sign-up/account')
-    }
+  const handleSubmit = async () => {
+    const requiredFields: PersonalInformationFields[] = [
+      'firstName',
+      'lastName',
+      'email',
+    ]
+    const isPersonalInformationValid = await trigger(requiredFields, {
+      shouldFocus: true,
+    })
+    if (!isPersonalInformationValid) return
+    router.push('/sign-up/account')
   }
 
   return (
@@ -72,41 +47,23 @@ export default function PersonalInfo() {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="firstName">First Name</Label>
-            <Input
-              id="firstName"
-              value={formData.firstName || ''}
-              onChange={(e) => updateFormData({ firstName: e.target.value })}
-              className={errors.firstName ? 'border-red-500' : ''}
-            />
+            <Input id="firstName" {...register('firstName')} />
             {errors.firstName && (
-              <p className="text-sm text-red-500">{errors.firstName}</p>
+              <p className="text-red-500">{errors.firstName?.message}</p>
             )}
           </div>
-
           <div className="space-y-2">
             <Label htmlFor="lastName">Last Name</Label>
-            <Input
-              id="lastName"
-              value={formData.lastName || ''}
-              onChange={(e) => updateFormData({ lastName: e.target.value })}
-              className={errors.lastName ? 'border-red-500' : ''}
-            />
+            <Input id="lastName" {...register('lastName')} />
             {errors.lastName && (
-              <p className="text-sm text-red-500">{errors.lastName}</p>
+              <p className="text-red-500">{errors.lastName?.message}</p>
             )}
           </div>
-
           <div className="space-y-2">
             <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              type="email"
-              value={formData.email || ''}
-              onChange={(e) => updateFormData({ email: e.target.value })}
-              className={errors.email ? 'border-red-500' : ''}
-            />
+            <Input id="email" {...register('email')} />
             {errors.email && (
-              <p className="text-sm text-red-500">{errors.email}</p>
+              <p className="text-red-500">{errors.email?.message}</p>
             )}
           </div>
         </form>

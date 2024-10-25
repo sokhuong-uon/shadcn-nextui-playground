@@ -9,9 +9,9 @@ jiti('./src/env/client.ts')
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // experimental: {
-  //   typedRoutes: true,
-  // },
+  experimental: {
+    typedRoutes: true,
+  },
 }
 
 export default nextConfig

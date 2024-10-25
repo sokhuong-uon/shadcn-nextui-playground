@@ -10,6 +10,7 @@
     "format": "prettier src/ --write"
   },
   "dependencies": {
+    "@hookform/resolvers": "^3.9.0",
     "@nextui-org/button": "^2.0.38",
     "@nextui-org/pagination": "^2.0.36",
     "@nextui-org/react": "^2.4.8",
@@ -37,6 +38,7 @@
     "next": "14.2.13",
     "react": "^18",
     "react-dom": "^18",
+    "react-hook-form": "^7.53.1",
     "recharts": "^2.13.0",
     "tailwind-merge": "^2.5.4",
     "tailwindcss-animate": "^1.0.7",
