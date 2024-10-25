@@ -1,3 +1,5 @@
+'use client'
+
 import { ReactNode, createContext, useContext, useState } from 'react'
 
 import { SignUpFormSchemaShape } from './sign-up-schema'
@@ -41,7 +43,9 @@ export function SignUpFormProvider({ children }: { children: ReactNode }) {
 export function useSignUpFormContext() {
   const context = useContext(SignUpFormContext)
   if (context === undefined) {
-    throw new Error('useFormContext must be used within a FormProvider')
+    throw new Error(
+      'useSignUpFormContext must be used within a SignUpFormProvider'
+    )
   }
   return context
 }
