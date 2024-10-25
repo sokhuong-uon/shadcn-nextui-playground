@@ -16,7 +16,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 
-import { useFormContext } from './sign-up-form-context'
+import { useSignUpFormContext } from './sign-up-form-context'
 import {
   type PersonalInformationSchemaShape,
   personalInfoSchema,
@@ -28,7 +28,7 @@ type ValidationErrors = {
 
 export default function PersonalInfo() {
   const router = useRouter()
-  const { formData, updateFormData } = useFormContext()
+  const { formData, updateFormData } = useSignUpFormContext()
   const [errors, setErrors] = useState<ValidationErrors>({})
 
   const validateFields = (): boolean => {

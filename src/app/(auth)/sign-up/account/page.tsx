@@ -15,12 +15,12 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { useZodForm } from '@/hooks/use-zod-sign-up-form'
 
-import { useFormContext } from '../sign-up-form-context'
+import { useSignUpFormContext } from '../sign-up-form-context'
 import { accountDetailsSchema } from '../sign-up-schema'
 
 export default function AccountDetails() {
   const router = useRouter()
-  const { formData, updateFormData } = useFormContext()
+  const { formData, updateFormData } = useSignUpFormContext()
   const { errors, validate } = useZodForm(accountDetailsSchema)
 
   const handleSubmit = (e: FormEvent): void => {

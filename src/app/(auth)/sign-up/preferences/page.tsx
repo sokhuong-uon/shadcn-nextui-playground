@@ -22,7 +22,7 @@ import {
 } from '@/components/ui/select'
 import { useZodForm } from '@/hooks/use-zod-sign-up-form'
 
-import { useFormContext } from '../sign-up-form-context'
+import { useSignUpFormContext } from '../sign-up-form-context'
 import { SignUpFormSchemaShape, preferencesSchema } from '../sign-up-schema'
 
 type Role = 'developer' | 'designer' | 'manager'
@@ -30,7 +30,7 @@ type Experience = 'junior' | 'mid' | 'senior'
 
 export default function Preferences() {
   const router = useRouter()
-  const { formData, updateFormData } = useFormContext()
+  const { formData, updateFormData } = useSignUpFormContext()
   const { errors, validate } = useZodForm(preferencesSchema)
 
   const handleSubmit = async (e: FormEvent): Promise<void> => {

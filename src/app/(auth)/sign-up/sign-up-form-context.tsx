@@ -2,16 +2,18 @@ import { ReactNode, createContext, useContext, useState } from 'react'
 
 import { SignUpFormSchemaShape } from './sign-up-schema'
 
-interface FormContextType {
+interface SignUpFormContextType {
   formData: Partial<SignUpFormSchemaShape>
   updateFormData: (data: Partial<SignUpFormSchemaShape>) => void
   isSubmitting: boolean
   setIsSubmitting: (value: boolean) => void
 }
 
-const FormContext = createContext<FormContextType | undefined>(undefined)
+const SignUpFormContext = createContext<SignUpFormContextType | undefined>(
+  undefined
+)
 
-export function FormProvider({ children }: { children: ReactNode }) {
+export function SignUpFormProvider({ children }: { children: ReactNode }) {
   const [formData, setFormData] = useState<Partial<SignUpFormSchemaShape>>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
 
@@ -23,7 +25,7 @@ export function FormProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-    <FormContext.Provider
+    <SignUpFormContext.Provider
       value={{
         formData,
         updateFormData,
@@ -32,12 +34,12 @@ export function FormProvider({ children }: { children: ReactNode }) {
       }}
     >
       {children}
-    </FormContext.Provider>
+    </SignUpFormContext.Provider>
   )
 }
 
-export function useFormContext() {
-  const context = useContext(FormContext)
+export function useSignUpFormContext() {
+  const context = useContext(SignUpFormContext)
   if (context === undefined) {
     throw new Error('useFormContext must be used within a FormProvider')
   }
