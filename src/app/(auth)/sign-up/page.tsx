@@ -17,10 +17,13 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 
 import { useFormContext } from './sign-up-form-context'
-import { type PersonalInfo, personalInfoSchema } from './sign-up-schema'
+import {
+  type PersonalInformationSchemaShape,
+  personalInfoSchema,
+} from './sign-up-schema'
 
 type ValidationErrors = {
-  [K in keyof PersonalInfo]?: string
+  [K in keyof PersonalInformationSchemaShape]?: string
 }
 
 export default function PersonalInfo() {
@@ -42,7 +45,9 @@ export default function PersonalInfo() {
         const formattedErrors: ValidationErrors = {}
         error.errors.forEach((err) => {
           if (err.path[0]) {
-            formattedErrors[err.path[0] as keyof PersonalInfo] = err.message
+            formattedErrors[
+              err.path[0] as keyof PersonalInformationSchemaShape
+            ] = err.message
           }
         })
         setErrors(formattedErrors)

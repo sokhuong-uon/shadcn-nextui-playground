@@ -23,7 +23,7 @@ import {
 import { useZodForm } from '@/hooks/use-zod-sign-up-form'
 
 import { useFormContext } from '../sign-up-form-context'
-import { FormData, preferencesSchema } from '../sign-up-schema'
+import { SignUpFormSchemaShape, preferencesSchema } from '../sign-up-schema'
 
 type Role = 'developer' | 'designer' | 'manager'
 type Experience = 'junior' | 'mid' | 'senior'
@@ -42,7 +42,9 @@ export default function Preferences() {
       })
     ) {
       try {
-        const response = await submitRegistration(formData as FormData)
+        const response = await submitRegistration(
+          formData as SignUpFormSchemaShape
+        )
         if (response.success) {
           router.push('/sign-up/success')
         }
@@ -138,7 +140,9 @@ type ApiResponse = {
   message?: string
 }
 
-async function submitRegistration(formData: FormData): Promise<ApiResponse> {
+async function submitRegistration(
+  formData: SignUpFormSchemaShape
+): Promise<ApiResponse> {
   console.log('Submitting registration:', formData)
   return new Promise((resolve) => {
     setTimeout(() => {

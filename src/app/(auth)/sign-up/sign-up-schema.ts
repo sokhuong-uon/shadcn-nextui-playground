@@ -31,13 +31,13 @@ export const preferencesSchema = z.object({
   }),
 })
 
-export const formSchema = z.object({
+export const signUpFormSchema = z.object({
   ...personalInfoSchema.shape,
   ...accountDetailsSchema.shape,
   ...preferencesSchema.shape,
 })
 
-export type FormData = z.infer<typeof formSchema>
-export type PersonalInfo = z.infer<typeof personalInfoSchema>
-export type AccountDetails = z.infer<typeof accountDetailsSchema>
-export type Preferences = z.infer<typeof preferencesSchema>
+export type SignUpFormSchemaShape = z.infer<typeof signUpFormSchema>
+export type PersonalInformationSchemaShape = z.infer<typeof personalInfoSchema>
+export type AccountDetailsSchemaShape = z.infer<typeof accountDetailsSchema>
+export type PerferencesSchemaShape = z.infer<typeof preferencesSchema>

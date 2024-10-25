@@ -1,10 +1,10 @@
 import { ReactNode, createContext, useContext, useState } from 'react'
 
-import { FormData } from './sign-up-schema'
+import { SignUpFormSchemaShape } from './sign-up-schema'
 
 interface FormContextType {
-  formData: Partial<FormData>
-  updateFormData: (data: Partial<FormData>) => void
+  formData: Partial<SignUpFormSchemaShape>
+  updateFormData: (data: Partial<SignUpFormSchemaShape>) => void
   isSubmitting: boolean
   setIsSubmitting: (value: boolean) => void
 }
@@ -12,10 +12,10 @@ interface FormContextType {
 const FormContext = createContext<FormContextType | undefined>(undefined)
 
 export function FormProvider({ children }: { children: ReactNode }) {
-  const [formData, setFormData] = useState<Partial<FormData>>({})
+  const [formData, setFormData] = useState<Partial<SignUpFormSchemaShape>>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const updateFormData = (newData: Partial<FormData>): void => {
+  const updateFormData = (newData: Partial<SignUpFormSchemaShape>): void => {
     setFormData((prev) => ({
       ...prev,
       ...newData,
