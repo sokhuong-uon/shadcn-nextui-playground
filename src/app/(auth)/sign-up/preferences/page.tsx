@@ -40,7 +40,7 @@ export default function Preferences() {
     })
     if (!isPreferencesValid) return
     console.log('form fields are valid', getValues())
-    router.push('/sign-up/success')
+    router.push('/success')
   }
 
   return (
@@ -55,7 +55,7 @@ export default function Preferences() {
             name="role"
             render={({ field }) => (
               <FormItem className="space-y-3">
-                <FormLabel>Notify me about...</FormLabel>
+                <FormLabel>Role</FormLabel>
                 <FormControl>
                   <RadioGroup
                     onValueChange={field.onChange}
@@ -92,7 +92,7 @@ export default function Preferences() {
             name="experience"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Email</FormLabel>
+                <FormLabel>Experience</FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
