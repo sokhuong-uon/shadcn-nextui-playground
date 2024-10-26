@@ -1,6 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
+import { useLayoutEffect } from 'react'
 
 import { useFormContext } from 'react-hook-form'
 
@@ -28,11 +29,36 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 
-import { PreferencesFields, SignUpFormSchema } from '../sign-up-schema'
+import {
+  AccountDetailsFields,
+  PersonalInformationFields,
+  PreferencesFields,
+  SignUpFormSchema,
+} from '../sign-up-schema'
 
 export default function Preferences() {
   const router = useRouter()
   const { trigger, getValues, control } = useFormContext<SignUpFormSchema>()
+
+  useLayoutEffect(() => {
+    const requiredAccountDetailsFields: AccountDetailsFields[] = [
+      'password',
+      'username',
+    ]
+    const requiredPersonalInformationFields: PersonalInformationFields[] = [
+      'email',
+      'firstName',
+      'lastName',
+    ]
+    trigger(requiredPersonalInformationFields).then((value) => {
+      if (!value) router.push('/sign-up')
+      else
+        trigger(requiredAccountDetailsFields).then((value) => {
+          if (!value) router.push('/sign-up/account')
+        })
+    })
+  }, [trigger, router])
+
   const handleSubmit = async () => {
     const requiredFields: PreferencesFields[] = ['experience', 'role']
     const isPreferencesValid = await trigger(requiredFields, {

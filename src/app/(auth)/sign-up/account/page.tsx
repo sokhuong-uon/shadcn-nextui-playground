@@ -1,6 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
+import { useLayoutEffect } from 'react'
 
 import { useFormContext } from 'react-hook-form'
 
@@ -15,7 +16,11 @@ import {
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 
-import { AccountDetailsFields, SignUpFormSchema } from '../sign-up-schema'
+import {
+  AccountDetailsFields,
+  PersonalInformationFields,
+  SignUpFormSchema,
+} from '../sign-up-schema'
 
 export default function AccountDetails() {
   const router = useRouter()
@@ -24,6 +29,17 @@ export default function AccountDetails() {
     trigger,
     formState: { errors },
   } = useFormContext<SignUpFormSchema>()
+
+  useLayoutEffect(() => {
+    const requiredPersonalInformationFields: PersonalInformationFields[] = [
+      'email',
+      'firstName',
+      'lastName',
+    ]
+    trigger(requiredPersonalInformationFields).then((value) => {
+      if (!value) router.push('/sign-up')
+    })
+  }, [trigger, router])
 
   const handleSubmit = async () => {
     const requiredFields: AccountDetailsFields[] = ['username', 'password']
