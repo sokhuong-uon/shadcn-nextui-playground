@@ -8,7 +8,6 @@ import { useFormContext } from 'react-hook-form'
 
 import { Button } from '@/components/ui/button'
 import {
-  Card,
   CardContent,
   CardFooter,
   CardHeader,
@@ -49,69 +48,66 @@ export default function AccountDetails() {
   }
 
   return (
-    <Card>
-      <form onSubmit={handleSubmit}>
-        <legend>
-          <CardHeader>
-            <CardTitle>Account Details</CardTitle>
-          </CardHeader>
-        </legend>
-        <CardContent className="space-y-4">
-          <FormField
-            control={control}
-            name="username"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Username</FormLabel>
-                <FormControl>
-                  <Input {...field} />
-                </FormControl>
-                <FormDescription>
-                  This is your unique username that will be used to login.
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+    <form onSubmit={handleSubmit}>
+      <legend>
+        <CardHeader>
+          <CardTitle>Account Details</CardTitle>
+        </CardHeader>
+      </legend>
+      <CardContent className="space-y-4">
+        <FormField
+          control={control}
+          name="username"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Username</FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
+              <FormDescription>
+                This is your unique username that will be used to login.
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-          <FormField
-            control={control}
-            name="password"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Password</FormLabel>
-                <FormControl>
-                  <Input {...field} type="password" />
-                </FormControl>
-                <FormDescription>
-                  Password must be at least 8 characters long and contain at
-                  least one uppercase letter, one lowercase letter, and one
-                  number.
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </CardContent>
-        <CardFooter className="flex justify-between">
-          <Button variant="outline" asChild>
-            <Link
-              onClick={() => (signUpStep.previousStep.current = 2)}
-              href="/sign-up/personal-information"
-            >
-              Previous
-            </Link>
-          </Button>
-          <NextStepButtonLink
-            onClick={handleSubmit}
-            href="/sign-up/preferences"
-            prefetch
-            isDisabled={false}
+        <FormField
+          control={control}
+          name="password"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Password</FormLabel>
+              <FormControl>
+                <Input {...field} type="password" />
+              </FormControl>
+              <FormDescription>
+                Password must be at least 8 characters long and contain at least
+                one uppercase letter, one lowercase letter, and one number.
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      </CardContent>
+      <CardFooter className="flex justify-between">
+        <Button variant="outline" asChild>
+          <Link
+            onClick={() => (signUpStep.previousStep.current = 2)}
+            href="/sign-up/personal-information"
           >
-            Next
-          </NextStepButtonLink>
-        </CardFooter>
-      </form>
-    </Card>
+            Previous
+          </Link>
+        </Button>
+        <NextStepButtonLink
+          onClick={handleSubmit}
+          href="/sign-up/preferences"
+          prefetch
+          isDisabled={false}
+        >
+          Next
+        </NextStepButtonLink>
+      </CardFooter>
+    </form>
   )
 }

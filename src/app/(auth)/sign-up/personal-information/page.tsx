@@ -6,7 +6,6 @@ import { FormEvent } from 'react'
 import { useFormContext } from 'react-hook-form'
 
 import {
-  Card,
   CardContent,
   CardFooter,
   CardHeader,
@@ -60,42 +59,40 @@ export default function PersonalInformationPage() {
   ]
 
   return (
-    <Card>
-      <form onSubmit={handleSubmit}>
-        <legend>
-          <CardHeader>
-            <CardTitle>Personal Information</CardTitle>
-          </CardHeader>
-        </legend>
-        <CardContent className="space-y-4">
-          {personalInformation.map((info) => (
-            <FormField
-              key={info.value}
-              control={form.control}
-              name={info.value}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{info.label}</FormLabel>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          ))}
-        </CardContent>
-        <CardFooter className="flex justify-end">
-          <NextStepButtonLink
-            onClick={handleSubmit}
-            href="/sign-up/account"
-            isDisabled={false}
-            prefetch
-          >
-            Next
-          </NextStepButtonLink>
-        </CardFooter>
-      </form>
-    </Card>
+    <form onSubmit={handleSubmit}>
+      <legend>
+        <CardHeader>
+          <CardTitle>Personal Information</CardTitle>
+        </CardHeader>
+      </legend>
+      <CardContent className="space-y-4">
+        {personalInformation.map((info) => (
+          <FormField
+            key={info.value}
+            control={form.control}
+            name={info.value}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{info.label}</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        ))}
+      </CardContent>
+      <CardFooter className="flex justify-end">
+        <NextStepButtonLink
+          onClick={handleSubmit}
+          href="/sign-up/account"
+          isDisabled={false}
+          prefetch
+        >
+          Next
+        </NextStepButtonLink>
+      </CardFooter>
+    </form>
   )
 }
