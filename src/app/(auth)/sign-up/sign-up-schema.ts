@@ -1,8 +1,8 @@
 import { z } from 'zod'
 
 export const personalInfoSchema = z.object({
-  firstName: z.string().min(2, 'First name must be at least 2 characters'),
-  lastName: z.string().min(2, 'Last name must be at least 2 characters'),
+  givenName: z.string().min(2, 'First name must be at least 2 characters'),
+  surname: z.string().min(2, 'Last name must be at least 2 characters'),
   email: z.string().email('Invalid email address'),
 })
 
@@ -37,6 +37,16 @@ export const signUpFormSchema = z.object({
   ...preferencesSchema.shape,
 })
 
+export const signUpFormSchemaInitialValues = {
+  email: '',
+  experience: '',
+  givenName: '',
+  password: '',
+  role: '',
+  surname: '',
+  username: '',
+}
+
 export type SignUpFormSchema = z.infer<typeof signUpFormSchema>
 export type PersonalInformationSchema = z.infer<typeof personalInfoSchema>
 export type AccountDetailsSchema = z.infer<typeof accountDetailsSchema>
@@ -45,3 +55,15 @@ export type PreferencesSchema = z.infer<typeof preferencesSchema>
 export type PersonalInformationFields = keyof PersonalInformationSchema
 export type AccountDetailsFields = keyof AccountDetailsSchema
 export type PreferencesFields = keyof PreferencesSchema
+
+export const requiredPersonalInformationFields = Object.keys(
+  personalInfoSchema.shape
+) as PersonalInformationFields[]
+
+export const requiredAccountDetailsFields = Object.keys(
+  accountDetailsSchema.shape
+) as AccountDetailsFields[]
+
+export const requiredPreferencesFields = Object.keys(
+  preferencesSchema.shape
+) as PreferencesFields[]

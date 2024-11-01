@@ -1,12 +1,10 @@
 'use client'
 
-import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { FormEvent } from 'react'
 
 import { useFormContext } from 'react-hook-form'
 
-import { Button } from '@/components/ui/button'
 import {
   Card,
   CardContent,
@@ -16,7 +14,6 @@ import {
 } from '@/components/ui/card'
 import {
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -27,21 +24,24 @@ import { Input } from '@/components/ui/input'
 import { NextStepButtonLink } from '../components/next-button'
 import {
   SignUpFormSchema,
-  requiredAccountDetailsFields,
+  requiredPersonalInformationFields,
 } from '../sign-up-schema'
 
-export default function AccountDetails() {
+export default function PersonalInformationPage() {
   const router = useRouter()
-  const { trigger, control } = useFormContext<SignUpFormSchema>()
+  const form = useFormContext<SignUpFormSchema>()
 
-  const handleSubmit = async (event: FormEvent) => {
-    event.preventDefault()
+  const handleSubmit = async (formEvent: FormEvent) => {
+    formEvent.preventDefault()
+    const isPersonalInformationValid = await form.trigger(
+      requiredPersonalInformationFields,
+      {
+        shouldFocus: true,
+      }
+    )
 
-    const isAccountDetailsValid = await trigger(requiredAccountDetailsFields, {
-      shouldFocus: true,
-    })
-    if (!isAccountDetailsValid) return
-    router.push('/sign-up/preferences')
+    if (!isPersonalInformationValid) return
+    router.push('/sign-up/account')
   }
 
   return (
@@ -49,53 +49,54 @@ export default function AccountDetails() {
       <form onSubmit={handleSubmit}>
         <legend>
           <CardHeader>
-            <CardTitle>Account Details</CardTitle>
+            <CardTitle>Personal Information</CardTitle>
           </CardHeader>
         </legend>
         <CardContent className="space-y-4">
           <FormField
-            control={control}
-            name="username"
+            control={form.control}
+            name="givenName"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Username</FormLabel>
+                <FormLabel>Given Name</FormLabel>
                 <FormControl>
                   <Input {...field} />
                 </FormControl>
-                <FormDescription>
-                  This is your unique username that will be used to login.
-                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
           />
-
           <FormField
-            control={control}
-            name="password"
+            control={form.control}
+            name="surname"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Password</FormLabel>
+                <FormLabel>Surname</FormLabel>
                 <FormControl>
-                  <Input {...field} type="password" />
+                  <Input {...field} />
                 </FormControl>
-                <FormDescription>
-                  Password must be at least 8 characters long and contain at
-                  least one uppercase letter, one lowercase letter, and one
-                  number.
-                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Email</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
         </CardContent>
-        <CardFooter className="flex justify-between">
-          <Button variant="outline" asChild>
-            <Link href="/sign-up/personal-information">Previous</Link>
-          </Button>
+        <CardFooter className="flex justify-end">
           <NextStepButtonLink
             onClick={handleSubmit}
-            href="/sign-up/preferences"
+            href="/sign-up/account"
             isDisabled={false}
           >
             Next

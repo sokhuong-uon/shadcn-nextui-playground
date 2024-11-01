@@ -12,6 +12,15 @@ const nextConfig = {
   experimental: {
     typedRoutes: true,
   },
+  async redirects() {
+    return [
+      {
+        source: '/sign-up',
+        destination: '/sign-up/personal-information',
+        permanent: false,
+      },
+    ]
+  },
 }
 
 export default nextConfig

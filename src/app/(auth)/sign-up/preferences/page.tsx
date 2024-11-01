@@ -1,7 +1,8 @@
 'use client'
 
+import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { useLayoutEffect } from 'react'
+import { FormEvent } from 'react'
 
 import { useFormContext } from 'react-hook-form'
 
@@ -29,53 +30,46 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 
-import {
-  AccountDetailsFields,
-  PersonalInformationFields,
-  PreferencesFields,
-  SignUpFormSchema,
-} from '../sign-up-schema'
+import { SignUpFormSchema } from '../sign-up-schema'
 
 export default function Preferences() {
   const router = useRouter()
-  const { trigger, getValues, control } = useFormContext<SignUpFormSchema>()
+  const { getValues, control, formState, trigger } =
+    useFormContext<SignUpFormSchema>()
 
-  useLayoutEffect(() => {
-    const requiredAccountDetailsFields: AccountDetailsFields[] = [
-      'password',
-      'username',
-    ]
-    const requiredPersonalInformationFields: PersonalInformationFields[] = [
-      'email',
-      'firstName',
-      'lastName',
-    ]
-    trigger(requiredPersonalInformationFields).then((value) => {
-      if (!value) router.push('/sign-up')
-      else
-        trigger(requiredAccountDetailsFields).then((value) => {
-          if (!value) router.push('/sign-up/account')
-        })
-    })
-  }, [trigger, router])
+  const handleSubmit = async (event: FormEvent) => {
+    event.preventDefault()
 
-  const handleSubmit = async () => {
-    const requiredFields: PreferencesFields[] = ['experience', 'role']
-    const isPreferencesValid = await trigger(requiredFields, {
-      shouldFocus: true,
-    })
-    if (!isPreferencesValid) return
+    if (!formState.isValid) return trigger()
+
     console.log('form fields are valid', getValues())
     router.push('/success')
   }
 
+  const roles: { value: SignUpFormSchema['role']; label: string }[] = [
+    { value: 'developer', label: 'Developer' },
+    { value: 'designer', label: 'Designer' },
+    { value: 'manager', label: 'Manager' },
+  ]
+
+  const experiences: {
+    value: SignUpFormSchema['experience']
+    label: string
+  }[] = [
+    { value: 'junior', label: 'Junior (0-2 years)' },
+    { value: 'mid', label: 'Mid-Level (2-5 years)' },
+    { value: 'senior', label: 'Senior (5+ years)' },
+  ]
+
   return (
     <Card>
-      <CardHeader>
-        <CardTitle>Preferences</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleSubmit}>
+        <legend>
+          <CardHeader>
+            <CardTitle>Preferences</CardTitle>
+          </CardHeader>
+        </legend>
+        <CardContent className="space-y-4">
           <FormField
             control={control}
             name="role"
@@ -88,24 +82,19 @@ export default function Preferences() {
                     defaultValue={field.value}
                     className="flex flex-col space-y-1"
                   >
-                    <FormItem className="flex items-center space-x-3 space-y-0">
-                      <FormControl>
-                        <RadioGroupItem value="developer" />
-                      </FormControl>
-                      <FormLabel className="font-normal">Developer</FormLabel>
-                    </FormItem>
-                    <FormItem className="flex items-center space-x-3 space-y-0">
-                      <FormControl>
-                        <RadioGroupItem value="designer" />
-                      </FormControl>
-                      <FormLabel className="font-normal">Designer</FormLabel>
-                    </FormItem>
-                    <FormItem className="flex items-center space-x-3 space-y-0">
-                      <FormControl>
-                        <RadioGroupItem value="manager" />
-                      </FormControl>
-                      <FormLabel className="font-normal">Manager</FormLabel>
-                    </FormItem>
+                    {roles.map((role) => (
+                      <FormItem
+                        key={role.value}
+                        className="flex items-center space-x-3 space-y-0"
+                      >
+                        <FormControl>
+                          <RadioGroupItem value={role.value} />
+                        </FormControl>
+                        <FormLabel className="font-normal">
+                          {role.label}
+                        </FormLabel>
+                      </FormItem>
+                    ))}
                   </RadioGroup>
                 </FormControl>
                 <FormMessage />
@@ -129,23 +118,28 @@ export default function Preferences() {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value="junior">Junior (0-2 years)</SelectItem>
-                    <SelectItem value="mid">Mid-Level (2-5 years)</SelectItem>
-                    <SelectItem value="senior">Senior (5+ years)</SelectItem>
+                    {experiences.map((experience) => (
+                      <SelectItem
+                        key={experience.value}
+                        value={experience.value}
+                      >
+                        {experience.label}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
                 <FormMessage />
               </FormItem>
             )}
           />
-        </form>
-      </CardContent>
-      <CardFooter className="flex justify-between">
-        <Button variant="outline" onClick={() => router.back()}>
-          Previous
-        </Button>
-        <Button onClick={handleSubmit}>Submit</Button>
-      </CardFooter>
+        </CardContent>
+        <CardFooter className="flex justify-between">
+          <Button variant="outline" asChild>
+            <Link href="/sign-up/account">Previous</Link>
+          </Button>
+          <Button onClick={handleSubmit}>Submit</Button>
+        </CardFooter>
+      </form>
     </Card>
   )
 }
