@@ -30,12 +30,16 @@ import {
 } from '@/components/ui/select'
 
 import { useSignUpStep } from '../components/sign-up-step-context'
-import { SignUpFormSchema } from '../sign-up-schema'
+import {
+  SignUpFormSchema,
+  accountDetailsSchema,
+  personalInfoSchema,
+  requiredPreferencesFields,
+} from '../sign-up-schema'
 
 export default function Preferences() {
   const router = useRouter()
-  const { getValues, control, formState, trigger } =
-    useFormContext<SignUpFormSchema>()
+  const { getValues, control, trigger } = useFormContext<SignUpFormSchema>()
   const signUpStep = useSignUpStep()
 
   const handleSubmit = async (event: FormEvent) => {
@@ -43,7 +47,26 @@ export default function Preferences() {
 
     signUpStep.previousStep.current = 3
 
-    if (!formState.isValid) return trigger()
+    const isReferencesFieldsValid = await trigger(requiredPreferencesFields, {
+      shouldFocus: true,
+    })
+
+    if (!isReferencesFieldsValid) return
+
+    if (isReferencesFieldsValid) {
+      const { success: isPersonalInfoValid } =
+        personalInfoSchema.safeParse(getValues())
+
+      const { success: isAccountDetailValid } =
+        accountDetailsSchema.safeParse(getValues())
+
+      if (!isPersonalInfoValid) {
+        return router.push('/sign-up/personal-information')
+      }
+      if (!isAccountDetailValid) {
+        return router.push('/sign-up/account')
+      }
+    }
 
     console.log('form fields are valid', getValues())
     router.push('/success')
@@ -90,7 +113,7 @@ export default function Preferences() {
                       className="flex items-center space-x-3 space-y-0"
                     >
                       <FormControl>
-                        <RadioGroupItem value={role.value} />
+                        <RadioGroupItem value={role.value} ref={field.ref} />
                       </FormControl>
                       <FormLabel className="font-normal">
                         {role.label}
@@ -112,7 +135,7 @@ export default function Preferences() {
               <FormLabel>Experience</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
-                  <SelectTrigger>
+                  <SelectTrigger ref={field.ref}>
                     <SelectValue placeholder="Select a verified email to display" />
                   </SelectTrigger>
                 </FormControl>
