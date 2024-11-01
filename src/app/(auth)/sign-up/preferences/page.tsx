@@ -30,15 +30,19 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 
+import { useSignUpStep } from '../components/sign-up-step-context'
 import { SignUpFormSchema } from '../sign-up-schema'
 
 export default function Preferences() {
   const router = useRouter()
   const { getValues, control, formState, trigger } =
     useFormContext<SignUpFormSchema>()
+  const signUpStep = useSignUpStep()
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault()
+
+    signUpStep.previousStep.current = 3
 
     if (!formState.isValid) return trigger()
 
@@ -135,7 +139,12 @@ export default function Preferences() {
         </CardContent>
         <CardFooter className="flex justify-between">
           <Button variant="outline" asChild>
-            <Link href="/sign-up/account">Previous</Link>
+            <Link
+              onClick={() => (signUpStep.previousStep.current = 3)}
+              href="/sign-up/account"
+            >
+              Previous
+            </Link>
           </Button>
           <Button onClick={handleSubmit}>Submit</Button>
         </CardFooter>

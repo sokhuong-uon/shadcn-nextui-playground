@@ -2,15 +2,19 @@
 
 import {
   Dispatch,
+  MutableRefObject,
   PropsWithChildren,
   SetStateAction,
   createContext,
+  useContext,
+  useRef,
   useState,
 } from 'react'
 
 type SignUpStep = {
   step: number
   setStep: Dispatch<SetStateAction<number>>
+  previousStep: MutableRefObject<number>
 }
 
 export const getSignUpStepBasedOnPath = (pathname: string) => {
@@ -27,6 +31,7 @@ export function SignUpStepProvider({
   children,
   initialStep,
 }: PropsWithChildren<{ initialStep: number }>) {
+  const previousStep = useRef<number>(-1)
   const [step, setStep] = useState(initialStep)
 
   return (
@@ -34,9 +39,18 @@ export function SignUpStepProvider({
       value={{
         setStep,
         step,
+        previousStep: previousStep,
       }}
     >
       {children}
     </SignUpContext.Provider>
   )
+}
+
+export function useSignUpStep() {
+  const context = useContext(SignUpContext)
+  if (context === undefined) {
+    throw new Error('useSignUpStep must be used within a SignUpStepProvider')
+  }
+  return context
 }

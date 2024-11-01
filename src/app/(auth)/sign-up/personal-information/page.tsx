@@ -22,6 +22,7 @@ import {
 import { Input } from '@/components/ui/input'
 
 import { NextStepButtonLink } from '../components/next-button'
+import { useSignUpStep } from '../components/sign-up-step-context'
 import {
   SignUpFormSchema,
   requiredPersonalInformationFields,
@@ -30,9 +31,13 @@ import {
 export default function PersonalInformationPage() {
   const router = useRouter()
   const form = useFormContext<SignUpFormSchema>()
+  const signUpStep = useSignUpStep()
 
   const handleSubmit = async (formEvent: FormEvent) => {
     formEvent.preventDefault()
+
+    signUpStep.previousStep.current = 1
+
     const isPersonalInformationValid = await form.trigger(
       requiredPersonalInformationFields,
       {
@@ -98,6 +103,7 @@ export default function PersonalInformationPage() {
             onClick={handleSubmit}
             href="/sign-up/account"
             isDisabled={false}
+            prefetch
           >
             Next
           </NextStepButtonLink>

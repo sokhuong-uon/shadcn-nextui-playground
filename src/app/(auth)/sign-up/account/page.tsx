@@ -25,6 +25,7 @@ import {
 import { Input } from '@/components/ui/input'
 
 import { NextStepButtonLink } from '../components/next-button'
+import { useSignUpStep } from '../components/sign-up-step-context'
 import {
   SignUpFormSchema,
   requiredAccountDetailsFields,
@@ -33,9 +34,12 @@ import {
 export default function AccountDetails() {
   const router = useRouter()
   const { trigger, control } = useFormContext<SignUpFormSchema>()
+  const signUpStep = useSignUpStep()
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault()
+
+    signUpStep.previousStep.current = 2
 
     const isAccountDetailsValid = await trigger(requiredAccountDetailsFields, {
       shouldFocus: true,
@@ -91,11 +95,17 @@ export default function AccountDetails() {
         </CardContent>
         <CardFooter className="flex justify-between">
           <Button variant="outline" asChild>
-            <Link href="/sign-up/personal-information">Previous</Link>
+            <Link
+              onClick={() => (signUpStep.previousStep.current = 2)}
+              href="/sign-up/personal-information"
+            >
+              Previous
+            </Link>
           </Button>
           <NextStepButtonLink
             onClick={handleSubmit}
             href="/sign-up/preferences"
+            prefetch
             isDisabled={false}
           >
             Next
