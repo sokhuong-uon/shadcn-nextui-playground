@@ -24,6 +24,7 @@ import { Input } from '@/components/ui/input'
 import { NextStepButtonLink } from '../components/next-button'
 import { useSignUpStep } from '../components/sign-up-step-context'
 import {
+  PersonalInformationFields,
   SignUpFormSchema,
   requiredPersonalInformationFields,
 } from '../sign-up-schema'
@@ -49,6 +50,15 @@ export default function PersonalInformationPage() {
     router.push('/sign-up/account')
   }
 
+  const personalInformation: {
+    value: PersonalInformationFields
+    label: string
+  }[] = [
+    { value: 'givenName', label: 'Given Name' },
+    { value: 'surname', label: 'Surname' },
+    { value: 'email', label: 'Email' },
+  ]
+
   return (
     <Card>
       <form onSubmit={handleSubmit}>
@@ -58,45 +68,22 @@ export default function PersonalInformationPage() {
           </CardHeader>
         </legend>
         <CardContent className="space-y-4">
-          <FormField
-            control={form.control}
-            name="givenName"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Given Name</FormLabel>
-                <FormControl>
-                  <Input {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="surname"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Surname</FormLabel>
-                <FormControl>
-                  <Input {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Email</FormLabel>
-                <FormControl>
-                  <Input {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          {personalInformation.map((info) => (
+            <FormField
+              key={info.value}
+              control={form.control}
+              name={info.value}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{info.label}</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          ))}
         </CardContent>
         <CardFooter className="flex justify-end">
           <NextStepButtonLink
