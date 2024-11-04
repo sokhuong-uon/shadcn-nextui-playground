@@ -29,6 +29,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 
+import { HoneypotInput } from '../components/honeypot-input'
 import { useSignUpStep } from '../components/sign-up-step-context'
 import {
   SignUpFormSchema,
@@ -151,6 +152,7 @@ export default function Preferences() {
             </FormItem>
           )}
         />
+        <HoneypotInput />
       </CardContent>
       <CardFooter className="flex justify-between">
         <Button variant="outline" asChild>

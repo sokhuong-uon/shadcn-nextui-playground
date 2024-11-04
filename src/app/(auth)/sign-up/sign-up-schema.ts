@@ -31,10 +31,16 @@ export const preferencesSchema = z.object({
   }),
 })
 
+export const honeypotSchema = z.object({
+  phone: z.string().optional(),
+  address: z.string().optional(),
+})
+
 export const signUpFormSchema = z.object({
   ...personalInfoSchema.shape,
   ...accountDetailsSchema.shape,
   ...preferencesSchema.shape,
+  ...honeypotSchema.shape,
 })
 
 export const signUpFormSchemaInitialValues = {
@@ -45,12 +51,14 @@ export const signUpFormSchemaInitialValues = {
   role: '',
   surname: '',
   username: '',
+  phone: '',
 }
 
 export type SignUpFormSchema = z.infer<typeof signUpFormSchema>
 export type PersonalInformationSchema = z.infer<typeof personalInfoSchema>
 export type AccountDetailsSchema = z.infer<typeof accountDetailsSchema>
 export type PreferencesSchema = z.infer<typeof preferencesSchema>
+export type HoneypotSchema = z.infer<typeof honeypotSchema>
 
 export type PersonalInformationFields = keyof PersonalInformationSchema
 export type AccountDetailsFields = keyof AccountDetailsSchema
