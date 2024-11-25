@@ -9,7 +9,7 @@ import {
   SignUpFormSchema,
   signUpFormSchema,
   signUpFormSchemaInitialValues,
-} from '../sign-up-schema'
+} from '../schemas/sign-up-schema'
 
 export function SignUpFormProvider({ children }: { children: ReactNode }) {
   const form = useForm<SignUpFormSchema>({

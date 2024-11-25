@@ -52,6 +52,7 @@ export const signUpFormSchemaInitialValues = {
   surname: '',
   username: '',
   phone: '',
+  address: '',
 }
 
 export type SignUpFormSchema = z.infer<typeof signUpFormSchema>

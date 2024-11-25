@@ -26,7 +26,7 @@ import {
   PersonalInformationFields,
   SignUpFormSchema,
   requiredPersonalInformationFields,
-} from '../sign-up-schema'
+} from '../schemas/sign-up-schema'
 
 export default function PersonalInformationPage() {
   const router = useRouter()

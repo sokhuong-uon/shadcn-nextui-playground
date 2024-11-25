@@ -28,7 +28,7 @@ import { useSignUpStep } from '../components/sign-up-step-context'
 import {
   SignUpFormSchema,
   requiredAccountDetailsFields,
-} from '../sign-up-schema'
+} from '../schemas/sign-up-schema'
 
 export default function AccountDetails() {
   const router = useRouter()
