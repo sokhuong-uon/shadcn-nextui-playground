@@ -2,8 +2,9 @@
 
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { FormEvent } from 'react'
+import { FormEvent, useEffect } from 'react'
 
+import { useFormState } from 'react-dom'
 import { useFormContext } from 'react-hook-form'
 
 import { Button } from '@/components/ui/button'
@@ -29,6 +30,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 
+import { registerUser } from '../actions/sign-up-action'
 import { HoneypotInput } from '../components/honeypot-input'
 import { useSignUpStep } from '../components/sign-up-step-context'
 import {
@@ -36,12 +38,26 @@ import {
   accountDetailsSchema,
   personalInfoSchema,
   requiredPreferencesFields,
-} from '../sign-up-schema'
+} from '../schemas/sign-up-schema'
 
 export default function Preferences() {
   const router = useRouter()
   const { getValues, control, trigger } = useFormContext<SignUpFormSchema>()
   const signUpStep = useSignUpStep()
+
+  const [formState, formAction] = useFormState(registerUser, {
+    error: null,
+    success: false,
+  })
+
+  useEffect(() => {
+    if (formState.success) {
+      router.push('/success')
+    }
+    if (formState.error) {
+      alert(`Error: ${formState.error}`)
+    }
+  }, [formState, router])
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault()
@@ -70,7 +86,12 @@ export default function Preferences() {
     }
 
     console.log('form fields are valid', getValues())
-    router.push('/success')
+    const formData = new FormData()
+    const values = getValues()
+    Object.entries(values).forEach(([key, value]) => {
+      formData.append(key, value)
+    })
+    formAction(formData)
   }
 
   const roles: { value: SignUpFormSchema['role']; label: string }[] = [

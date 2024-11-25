@@ -3,7 +3,7 @@ import { useFormContext } from 'react-hook-form'
 import { FormControl, FormField, FormItem } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 
-import { SignUpFormSchema } from '../sign-up-schema'
+import { SignUpFormSchema } from '../schemas/sign-up-schema'
 
 export function HoneypotInput() {
   const form = useFormContext<SignUpFormSchema>()
